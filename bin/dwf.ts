@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { DwfStack } from '../lib/dwf-stack';
 import { UsersStack } from '../lib/users-stack';
+import { VpcStack } from '../lib/vpc-stack';
 
 const app = new cdk.App();
-new DwfStack(app, 'DwfStack');
-new UsersStack(app, 'UsersStack');
+
+const userStack = new UsersStack(app, 'UsersStack');
+
+const vpcStack = new VpcStack(app, 'VpcStack');
+
+vpcStack.grantDeployPrivileges(userStack.buildScriptsUser)

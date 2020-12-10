@@ -18,6 +18,6 @@ export class UsersStack extends cdk.Stack {
 
         this.buildScriptsUserAccessKey = new iam.CfnAccessKey(this, 'myAccessKey', {
             userName: this.buildScriptsUser.userName
-        })
+        });
     }
 }

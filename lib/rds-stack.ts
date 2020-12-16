@@ -24,10 +24,9 @@ export class RDSStack extends cdk.Stack {
             engine: rds.DatabaseInstanceEngine.postgres({
                 version: rds.PostgresEngineVersion.VER_12_4
             }),
-            // TODO make suer its gonna be free
             instanceType: new ec2.InstanceType('t2.micro'),
             vpc: props.vpc,
-            vpcSubnets: {subnetType: ec2.SubnetType.ISOLATED},
+            vpcSubnets: {subnetType: ec2.SubnetType.PUBLIC},
             storageEncrypted: false, // t2.micro doesn't support encryption at rest
             multiAz: false,
             autoMinorVersionUpgrade: false,
@@ -36,13 +35,14 @@ export class RDSStack extends cdk.Stack {
             deletionProtection: false,
             credentials: rds.Credentials.fromSecret(this.dbSecret, 'tj'),
             databaseName: 'Reporting',
-            port: 3306
+            port: 3306,
         });
+        this.postgresRDSInstance.connections.allowFromAnyIpv4(ec2.Port.tcp(3306))
     }
 
     grantDeployPrivileges(user: iam.User) {
         // this creates two way dependency between this and user stack and had to be added after
-        this.dbSecret.grantRead(user);
+        // this.dbSecret.grantRead(user);
         user.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonRDSFullAccess'));
 
         user.addToPrincipalPolicy(new iam.PolicyStatement({

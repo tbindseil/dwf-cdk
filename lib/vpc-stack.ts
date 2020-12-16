@@ -13,11 +13,18 @@ export class VpcStack extends Stack {
         this.vpc = new Vpc(this, 'CustomVPC', {
             cidr: '10.0.0.0/16',
             maxAzs: 2,
-            subnetConfiguration: [{
-                cidrMask: 26,
-                name: 'isolatedSubnet',
-                subnetType: SubnetType.ISOLATED,
-            }],
+            subnetConfiguration: [
+                {
+                    cidrMask: 26,
+                    name: 'isolatedSubnet',
+                    subnetType: SubnetType.ISOLATED,
+                },
+                {
+                    cidrMask: 26,
+                    name: 'publicSubnet',
+                    subnetType: SubnetType.PUBLIC,
+                }
+            ],
             natGateways: 0
         });
 

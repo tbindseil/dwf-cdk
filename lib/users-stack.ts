@@ -19,5 +19,8 @@ export class UsersStack extends cdk.Stack {
         this.buildScriptsUserAccessKey = new iam.CfnAccessKey(this, 'myAccessKey', {
             userName: this.buildScriptsUser.userName
         });
+
+        // uncomment if you create a new user and need to see the access key
+        // new cdk.CfnOutput(this, 'secretAccessKey', { value: this.buildScriptsUserAccessKey.attrSecretAccessKey });
     }
 }
